@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Common.Result;
 using Core.Dto.Category;
+using Core.Dto.Category.Create;
 using Core.Dto.Category.Update;
 
 namespace Core.Services.Category

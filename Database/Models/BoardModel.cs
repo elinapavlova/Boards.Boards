@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Common.Base;
 
 namespace Database.Models
@@ -10,5 +11,6 @@ namespace Database.Models
         public Guid CategoryId { get; set; }
         
         public CategoryModel Category { get; set; }
+        public ICollection<ThreadModel> Threads { get; set; }
     }
 }

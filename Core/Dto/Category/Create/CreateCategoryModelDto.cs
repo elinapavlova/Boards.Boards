@@ -1,4 +1,4 @@
-﻿namespace Core.Dto.Category
+﻿namespace Core.Dto.Category.Create
 {
     public class CreateCategoryModelDto
     {

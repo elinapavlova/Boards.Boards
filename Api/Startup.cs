@@ -7,10 +7,14 @@ using Common.Options;
 using Core.Profiles;
 using Core.Services.Board;
 using Core.Services.Category;
+using Core.Services.FileStorage;
+using Core.Services.Thread;
 using Database;
 using Database.Repositories.Base;
 using Database.Repositories.Board;
 using Database.Repositories.Category;
+using Database.Repositories.File;
+using Database.Repositories.Thread;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -38,6 +42,12 @@ namespace Api
         
         public void ConfigureServices(IServiceCollection services)
         {
+            // Configure Http Clients
+            services.AddHttpClient<IFileStorageService, FileStorageService>("FileStorage", client =>
+            {
+                client.BaseAddress = new Uri(Configuration["BaseAddress:FileStorage"]);
+            });
+            
             var key = Encoding.ASCII.GetBytes(Configuration["AppOptions:Secret"]);
             
             ConfigureSwagger(services);
@@ -49,14 +59,18 @@ namespace Api
             services.AddScoped<IBaseRepository, BaseRepository>();
             services.AddScoped<IBoardRepository, BoardRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IThreadRepository, ThreadRepository>();
+            services.AddScoped<IFileRepository, FileRepository>();
 
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IBoardService, BoardService>();
+            services.AddScoped<IThreadService, ThreadService>();
+            services.AddScoped<IFileStorageService, FileStorageService>();
 
             var connection = Configuration.GetConnectionString("DefaultConnection");
-            services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(connection));
-            //services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connection,  
-            //    x => x.MigrationsAssembly("Database")));
+            //services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(connection));
+            services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connection,  
+                x => x.MigrationsAssembly("Database")));
             
             var mapperConfig = new MapperConfiguration(mc =>
             {

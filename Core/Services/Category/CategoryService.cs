@@ -4,6 +4,7 @@ using AutoMapper;
 using Common.Error;
 using Common.Result;
 using Core.Dto.Category;
+using Core.Dto.Category.Create;
 using Core.Dto.Category.Update;
 using Core.Services.Board;
 using Database.Models;

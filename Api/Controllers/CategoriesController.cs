@@ -2,12 +2,14 @@
 using System.Threading.Tasks;
 using Common.Result;
 using Core.Dto.Category;
+using Core.Dto.Category.Create;
 using Core.Dto.Category.Update;
 using Core.Services.Category;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+// Проверить с Authorize, изменить структуру FileStorageService
 namespace Api.Controllers
 {
     [ApiVersion("1.0")]
@@ -29,7 +31,7 @@ namespace Api.Controllers
         /// <response code="400">If the category already exists</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CategoryModelDto>> Create(CreateCategoryModelDto category)
@@ -98,6 +100,8 @@ namespace Api.Controllers
         /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("With-Boards/{id:guid}")]
         [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CategoryResponseDto>> GetByIdWithBoards(Guid id)
             => await ReturnResult<ResultContainer<CategoryResponseDto>, CategoryResponseDto>
                 (_categoryService.GetByIdWithBoards(id));

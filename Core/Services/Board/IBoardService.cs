@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common.Result;
-using Core.Dto;
 using Core.Dto.Board;
 using Core.Dto.Board.Create;
 using Core.Dto.Board.Update;

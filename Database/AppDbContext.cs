@@ -7,7 +7,8 @@ namespace Database
     {
         public DbSet<BoardModel> Boards { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
-        
+        public DbSet<ThreadModel> Threads { get; set; }
+
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -29,6 +30,17 @@ namespace Database
             {
                 category.Property(c => c.Name).IsRequired().HasMaxLength(100);
                 category.Property(c => c.DateCreated).IsRequired();
+            });
+
+            builder.Entity<ThreadModel>(thread =>
+            {
+                thread.Property(t => t.Name).IsRequired().HasMaxLength(100);
+                thread.Property(t => t.Text).IsRequired().HasMaxLength(500);
+                thread.Property(t => t.DateCreated).IsRequired();
+
+                thread.HasOne(t => t.Board)
+                    .WithMany(b => b.Threads)
+                    .HasForeignKey(t => t.BoardId);
             });
         }
     }

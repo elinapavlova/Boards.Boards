@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Common.Error;
 using Common.Result;
-using Core.Dto;
 using Core.Dto.Board;
 using Core.Dto.Board.Create;
 using Core.Dto.Board.Update;

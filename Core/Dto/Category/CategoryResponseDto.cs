@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Core.Dto.Board;
 
 namespace Core.Dto.Category
 {
