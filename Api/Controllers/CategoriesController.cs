@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-// Проверить с Authorize, изменить структуру FileStorageService
 namespace Api.Controllers
 {
     [ApiVersion("1.0")]
@@ -31,7 +30,7 @@ namespace Api.Controllers
         /// <response code="400">If the category already exists</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CategoryModelDto>> Create(CreateCategoryModelDto category)

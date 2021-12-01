@@ -31,7 +31,7 @@ namespace Api.Controllers
         /// <response code="404">If category doesn't exist</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpPost]
-        //[Authorize]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -45,7 +45,7 @@ namespace Api.Controllers
         /// <response code="404">If the board doesn't exist</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("{id:guid}")]
-        [Authorize]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -61,7 +61,7 @@ namespace Api.Controllers
         /// <response code="404">If the board doesn't exist</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("{name}")]
-        [Authorize]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

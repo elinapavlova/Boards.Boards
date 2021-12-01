@@ -74,7 +74,7 @@ namespace Api.Controllers
         /// <response code="404">If the thread doesn't exists</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpDelete("{id:guid}")]
-        //[Authorize]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ThreadModelDto>> Delete(Guid id)
