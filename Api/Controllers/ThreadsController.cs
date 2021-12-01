@@ -27,7 +27,7 @@ namespace Api.Controllers
         /// Create a thread
         /// </summary>
         /// <response code="200">Return created thread</response>
-        /// <response code="400">If the thread already exists</response>
+        /// <response code="400">If the thread name or text are empty</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpPost]
         [AllowAnonymous]
@@ -42,7 +42,7 @@ namespace Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <response code="200">Return thread</response>
-        /// <response code="404">If the thread doesn't exists</response>
+        /// <response code="404">If the thread doesn't exist</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("{id:guid}")]
         [AllowAnonymous]
@@ -56,7 +56,7 @@ namespace Api.Controllers
         /// </summary>
         /// <param name="name"></param>
         /// <response code="200">Return thread</response>
-        /// <response code="404">If the thread doesn't exists</response>
+        /// <response code="404">If the thread doesn't exist</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("{name}")]
         [AllowAnonymous]
@@ -71,7 +71,7 @@ namespace Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <response code="200">Return thread</response>
-        /// <response code="404">If the thread doesn't exists</response>
+        /// <response code="404">If the thread doesn't exist</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpDelete("{id:guid}")]
         [Authorize]

@@ -41,7 +41,7 @@ namespace Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <response code="200">Return category</response>
-        /// <response code="404">If the category doesn't exists</response>
+        /// <response code="404">If the category doesn't exist</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("{id:guid}")]
         [Authorize]
@@ -55,7 +55,7 @@ namespace Api.Controllers
         /// </summary>
         /// <param name="name"></param>
         /// <response code="200">Return category</response>
-        /// <response code="404">If the category doesn't exists</response>
+        /// <response code="404">If the category doesn't exist</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("{name}")]
         [Authorize]
