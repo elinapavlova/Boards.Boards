@@ -18,14 +18,8 @@ namespace Core.Profiles
         {
             CreateMap<CreateBoardModelDto, BoardModel>();
 
-            CreateMap<ThreadModel, ThreadModelDto>();
-            CreateMap<ThreadModel, ThreadResponseDto>();
-            CreateMap<ThreadModel, CreateThreadResponseDto>();
-
-            
             CreateMap<CreateCategoryModelDto, CategoryModel>();
-            CreateMap<CategoryModel, CategoryModelDto>();
-
+            
             
             CreateMap<CreateThreadRequestDto, ThreadModel>()
                 .ForMember(x => x.Files, opt 
@@ -34,34 +28,38 @@ namespace Core.Profiles
             
             CreateMap<FileResponseDto, FileModel>();
             CreateMap<FileModel, FileResponseDto>();
-
             
+
             CreateMap<BoardModel, BoardModelDto>();
             CreateMap<BoardModel, BoardResponseDto>();
             CreateMap<BoardModel, ResultContainer<BoardModelDto>>()
-                .ForMember("Data", opt =>
+                .ForMember(x => x.Data, opt =>
                     opt.MapFrom(b => b));
             CreateMap<ICollection<BoardModel>, ResultContainer<ICollection<BoardResponseDto>>>()
-                .ForMember("Data", opt => 
+                .ForMember(x => x.Data, opt => 
                     opt.MapFrom(b => b));
 
             
+            CreateMap<CategoryModel, CategoryModelDto>();
             CreateMap<CategoryModel, ResultContainer<CategoryModelDto>>()
-                .ForMember("Data", opt =>
+                .ForMember(x => x.Data, opt =>
                     opt.MapFrom(c => c));
             
             
+            CreateMap<ThreadModel, ThreadModelDto>();
+            CreateMap<ThreadModel, ThreadResponseDto>();
+            CreateMap<ThreadModel, CreateThreadResponseDto>();
             CreateMap<ThreadModel, ResultContainer<ThreadResponseDto>>()
-                .ForMember("Data", opt =>
+                .ForMember(x => x.Data, opt =>
                     opt.MapFrom(t => t));
             CreateMap<ThreadModel, ResultContainer<CreateThreadResponseDto>>()
-                .ForMember("Data", opt =>
+                .ForMember(x => x.Data, opt =>
                     opt.MapFrom(t => t));
             CreateMap<ThreadModel, ResultContainer<ThreadModelDto>>()
-                .ForMember("Data", opt =>
+                .ForMember(x => x.Data, opt =>
                     opt.MapFrom(t => t));
             CreateMap<ICollection<ThreadModel>, ResultContainer<ICollection<ThreadModelDto>>>()
-                .ForMember("Data", opt =>
+                .ForMember(x => x.Data, opt =>
                     opt.MapFrom(t => t));
         }
     }
