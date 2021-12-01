@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Database.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20211201113236_AddThreadsTable")]
-    partial class AddThreadsTable
+    [Migration("20211201122445_AddFilesTable")]
+    partial class AddFilesTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,6 +68,43 @@ namespace Database.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Database.Models.FileModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)");
+
+                    b.Property<Guid?>("MessageId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<Guid>("ThreadId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ThreadId");
+
+                    b.ToTable("FileModel");
+                });
+            
             modelBuilder.Entity("Database.Models.ThreadModel", b =>
                 {
                     b.Property<Guid>("Id")
@@ -108,6 +145,17 @@ namespace Database.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Database.Models.FileModel", b =>
+                {
+                    b.HasOne("Database.Models.ThreadModel", "Thread")
+                        .WithMany("Files")
+                        .HasForeignKey("ThreadId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Thread");
+                });
+
             modelBuilder.Entity("Database.Models.ThreadModel", b =>
                 {
                     b.HasOne("Database.Models.BoardModel", "Board")
@@ -127,6 +175,11 @@ namespace Database.Migrations
             modelBuilder.Entity("Database.Models.CategoryModel", b =>
                 {
                     b.Navigation("Boards");
+                });
+
+            modelBuilder.Entity("Database.Models.ThreadModel", b =>
+                {
+                    b.Navigation("Files");
                 });
 #pragma warning restore 612, 618
         }

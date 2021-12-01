@@ -76,49 +76,31 @@ namespace Database.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Extension")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("character varying(5)");
 
                     b.Property<Guid?>("MessageId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<string>("Path")
-                        .HasColumnType("text");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<Guid>("ThreadId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("MessageId");
 
                     b.HasIndex("ThreadId");
 
                     b.ToTable("FileModel");
-                });
-
-            modelBuilder.Entity("Database.Models.MessageModel", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Text")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ThreadId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ThreadId");
-
-                    b.ToTable("MessageModel");
                 });
 
             modelBuilder.Entity("Database.Models.ThreadModel", b =>
@@ -163,25 +145,8 @@ namespace Database.Migrations
 
             modelBuilder.Entity("Database.Models.FileModel", b =>
                 {
-                    b.HasOne("Database.Models.MessageModel", "Message")
-                        .WithMany("Files")
-                        .HasForeignKey("MessageId");
-
                     b.HasOne("Database.Models.ThreadModel", "Thread")
                         .WithMany("Files")
-                        .HasForeignKey("ThreadId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Message");
-
-                    b.Navigation("Thread");
-                });
-
-            modelBuilder.Entity("Database.Models.MessageModel", b =>
-                {
-                    b.HasOne("Database.Models.ThreadModel", "Thread")
-                        .WithMany("Messages")
                         .HasForeignKey("ThreadId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -210,16 +175,9 @@ namespace Database.Migrations
                     b.Navigation("Boards");
                 });
 
-            modelBuilder.Entity("Database.Models.MessageModel", b =>
-                {
-                    b.Navigation("Files");
-                });
-
             modelBuilder.Entity("Database.Models.ThreadModel", b =>
                 {
                     b.Navigation("Files");
-
-                    b.Navigation("Messages");
                 });
 #pragma warning restore 612, 618
         }

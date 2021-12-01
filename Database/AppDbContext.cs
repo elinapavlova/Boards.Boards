@@ -42,6 +42,18 @@ namespace Database
                     .WithMany(b => b.Threads)
                     .HasForeignKey(t => t.BoardId);
             });
+
+            builder.Entity<FileModel>(file =>
+            {
+                file.Property(f => f.Name).IsRequired().HasMaxLength(30);
+                file.Property(f => f.Path).IsRequired().HasMaxLength(100);
+                file.Property(f => f.Extension).IsRequired().HasMaxLength(5);
+                file.Property(f => f.DateCreated).IsRequired();
+
+                file.HasOne(f => f.Thread)
+                    .WithMany(t => t.Files)
+                    .HasForeignKey(f => f.ThreadId);
+            });
         }
     }
 }
