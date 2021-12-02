@@ -42,9 +42,8 @@ namespace Api.Controllers
         /// <param name="id"></param>
         /// <response code="200">Return category</response>
         /// <response code="404">If the category doesn't exist</response>
-        /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("{id:guid}")]
-        [Authorize]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CategoryModelDto>> GetById(Guid id)
@@ -56,9 +55,8 @@ namespace Api.Controllers
         /// <param name="name"></param>
         /// <response code="200">Return category</response>
         /// <response code="404">If the category doesn't exist</response>
-        /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("{name}")]
-        [Authorize]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CategoryModelDto>> GetByName(string name)
@@ -96,9 +94,8 @@ namespace Api.Controllers
         /// </summary>
         /// <response code="200">Return boards list</response>
         /// <response code="404">If the category doesn't exist</response>
-        /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("With-Boards/{id:guid}")]
-        [Authorize]
+        [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CategoryResponseDto>> GetByIdWithBoards(Guid id)

@@ -43,7 +43,6 @@ namespace Api.Controllers
         /// </summary>
         /// <response code="200">Return the board</response>
         /// <response code="404">If the board doesn't exist</response>
-        /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("{id:guid}")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -59,7 +58,6 @@ namespace Api.Controllers
         /// <param name="name"></param>
         /// <response code="200">Return the board</response>
         /// <response code="404">If the board doesn't exist</response>
-        /// <response code="401">If the User wasn't authorized</response>
         [HttpGet("{name}")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
