@@ -35,7 +35,10 @@ namespace Boards.BoardService.Core.Profiles
             CreateMap<BoardModel, ResultContainer<BoardModelDto>>()
                 .ForMember(x => x.Data, opt =>
                     opt.MapFrom(b => b));
-            CreateMap<ICollection<BoardModel>, ResultContainer<ICollection<BoardResponseDto>>>()
+            CreateMap<BoardModel, ResultContainer<BoardResponseDto>>()
+                .ForMember(x => x.Data, opt =>
+                    opt.MapFrom(b => b));
+            CreateMap<ICollection<BoardModel>, ResultContainer<ICollection<BoardModelDto>>>()
                 .ForMember(x => x.Data, opt => 
                     opt.MapFrom(b => b));
 

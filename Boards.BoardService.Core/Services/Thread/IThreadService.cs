@@ -13,5 +13,6 @@ namespace Boards.BoardService.Core.Services.Thread
         Task<ResultContainer<ThreadResponseDto>> GetById(Guid id);
         Task<ResultContainer<ICollection<ThreadModelDto>>> GetByName(string name);
         Task<ResultContainer<ThreadModelDto>> Delete(Guid id);
+        Task<ResultContainer<ICollection<ThreadModelDto>>> GetByBoardId(Guid id);
     }
 }

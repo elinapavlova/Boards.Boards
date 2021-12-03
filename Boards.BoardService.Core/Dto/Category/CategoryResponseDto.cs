@@ -6,6 +6,6 @@ namespace Boards.BoardService.Core.Dto.Category
     public class CategoryResponseDto
     {
         public string Name { get; set; }
-        public ICollection<BoardResponseDto> Boards { get; set; }
+        public ICollection<BoardModelDto> Boards { get; set; }
     }
 }

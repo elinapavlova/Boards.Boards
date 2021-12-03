@@ -15,6 +15,7 @@ namespace Boards.BoardService.Core.Services.Board
         Task<ResultContainer<BoardModelDto>> GetById(Guid id);
         Task<ResultContainer<BoardModelDto>> Delete(Guid id);
         Task<ResultContainer<BoardModelDto>> Update(UpdateBoardRequestDto data);
-        Task<ResultContainer<ICollection<BoardResponseDto>>> GetByCategoryId(Guid id);
+        Task<ResultContainer<ICollection<BoardModelDto>>> GetByCategoryId(Guid id);
+        Task<ResultContainer<BoardResponseDto>> GetByIdWithThreads(Guid id);
     }
 }

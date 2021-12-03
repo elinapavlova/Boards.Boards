@@ -123,5 +123,18 @@ namespace Boards.BoardService.Core.Services.Thread
             result = _mapper.Map<ResultContainer<ThreadModelDto>>(thread);
             return result;
         }
+
+        public async Task<ResultContainer<ICollection<ThreadModelDto>>> GetByBoardId(Guid id)
+        {
+            var result = new ResultContainer<ICollection<ThreadModelDto>>();
+            var board = await _boardRepository.GetById<BoardModel>(id);
+            if (board == null)
+            {
+                result.ErrorType = ErrorType.NotFound;
+                return result;
+            }
+            result = _mapper.Map<ResultContainer<ICollection<ThreadModelDto>>>(await _threadRepository.GetByBoardId(id));
+            return result;
+        }
     }
 }

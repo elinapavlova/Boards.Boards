@@ -5,6 +5,7 @@ using AutoMapper;
 using Boards.BoardService.Core.Dto.Board;
 using Boards.BoardService.Core.Dto.Board.Create;
 using Boards.BoardService.Core.Dto.Board.Update;
+using Boards.BoardService.Core.Services.Thread;
 using Common.Error;
 using Common.Result;
 using Boards.BoardService.Database.Models;
@@ -16,17 +17,20 @@ namespace Boards.BoardService.Core.Services.Board
     public class BoardService : IBoardService
     {
         private readonly IBoardRepository _boardRepository;
+        private readonly IThreadService _threadService;
         private readonly IMapper _mapper;
         private readonly ICategoryRepository _categoryRepository;
 
         public BoardService 
         (
             IBoardRepository boardRepository, 
+            IThreadService threadService,
             IMapper mapper,
             ICategoryRepository categoryRepository
         )
         {
             _boardRepository = boardRepository;
+            _threadService = threadService;
             _mapper = mapper;
             _categoryRepository = categoryRepository;
         }
@@ -114,9 +118,9 @@ namespace Boards.BoardService.Core.Services.Board
             return result;
         }
 
-        public async Task<ResultContainer<ICollection<BoardResponseDto>>> GetByCategoryId(Guid id)
+        public async Task<ResultContainer<ICollection<BoardModelDto>>> GetByCategoryId(Guid id)
         {
-            var result = new ResultContainer<ICollection<BoardResponseDto>>();
+            var result = new ResultContainer<ICollection<BoardModelDto>>();
             var category = await _categoryRepository.GetById<CategoryModel>(id);
             if (category == null)
             {
@@ -124,7 +128,27 @@ namespace Boards.BoardService.Core.Services.Board
                 return result;
             }
             
-            result = _mapper.Map<ResultContainer<ICollection<BoardResponseDto>>>(await _boardRepository.GetByCategoryId(id));
+            result = _mapper.Map<ResultContainer<ICollection<BoardModelDto>>>(await _boardRepository.GetByCategoryId(id));
+            return result;
+        }
+
+        public async Task<ResultContainer<BoardResponseDto>> GetByIdWithThreads(Guid id)
+        {
+            var result = new ResultContainer<BoardResponseDto>
+            {
+                Data = new BoardResponseDto()
+            };
+            var board = await _boardRepository.GetById<BoardModel>(id);
+            
+            var threads = await _threadService.GetByBoardId(id);
+            if ( threads.ErrorType.HasValue)
+            {
+                result.ErrorType = ErrorType.NotFound;
+                return result;
+            }
+
+            result = _mapper.Map<ResultContainer<BoardResponseDto>>(board);
+            result.Data.Threads =  threads.Data;
             return result;
         }
     }
