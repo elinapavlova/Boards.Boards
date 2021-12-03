@@ -33,6 +33,12 @@ namespace Core.Services.FileStorage
             _fileRepository = fileRepository;
         }
 
+        public async Task<ICollection<FileModel>> GetByThreadId(Guid id)
+        {
+            var files = _fileRepository.Get<FileModel>(f => f.ThreadId == id && f.MessageId == null);
+            return files;
+        }
+        
         public async Task<ResultContainer<UploadFilesResponseDto>> Upload(IFormFileCollection files, Guid threadId)
         {
             var result = new ResultContainer<UploadFilesResponseDto>();
@@ -111,6 +117,7 @@ namespace Core.Services.FileStorage
         private async Task<FileResponseDto> AddFileToDatabase(FileResponseDto newFile)
         {
             var file = _mapper.Map<FileModel>(newFile);
+            file.MessageId = null;
             var result = _mapper.Map<FileResponseDto>(await _fileRepository.Create(file));
 
             return result;

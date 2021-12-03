@@ -4,7 +4,7 @@ namespace Core.Dto.File.Upload
 {
     public class UploadFilesResultDto
     {
-        public IList<FileResponseDto> Data { get; set; }
+        public ICollection<FileResponseDto> Data { get; set; }
         public int? ErrorType { get; set; }
     }
 }

@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 using AutoMapper;
 using Common.Error;
 using Common.Result;
+using Core.Dto.File;
 using Core.Dto.File.Upload;
 using Core.Dto.Thread;
 using Core.Dto.Thread.Create;
 using Core.Services.FileStorage;
+using Core.Services.Message;
 using Database.Models;
 using Database.Repositories.Board;
 using Database.Repositories.Thread;
@@ -21,6 +22,7 @@ namespace Core.Services.Thread
         private readonly IThreadRepository _threadRepository;
         private readonly IBoardRepository _boardRepository;
         private readonly IFileStorageService _fileStorageService;
+        private readonly IMessageService _messageService;
         private readonly IMapper _mapper;
 
         public ThreadService
@@ -28,12 +30,14 @@ namespace Core.Services.Thread
             IThreadRepository threadRepository, 
             IBoardRepository boardRepository,
             IFileStorageService fileStorageService,
+            IMessageService messageService,
             IMapper mapper
         )
         {
             _threadRepository = threadRepository;
             _boardRepository = boardRepository;
             _fileStorageService = fileStorageService;
+            _messageService = messageService;
             _mapper = mapper;
         }
 
@@ -57,8 +61,7 @@ namespace Core.Services.Thread
             }
             
             var thread = _mapper.Map<ThreadModel>(data);
-            thread.DateCreated = DateTime.Now;
-            
+
             using var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled);
 
             result = _mapper.Map<ResultContainer<CreateThreadResponseDto>>(await _threadRepository.Create(thread));
@@ -87,19 +90,16 @@ namespace Core.Services.Thread
                 return result;
             }
 
-            // Получить сообщения
-            
             result = _mapper.Map<ResultContainer<ThreadResponseDto>>(thread);
+            result.Data.Files = _mapper.Map<ICollection<FileResponseDto>>(await _fileStorageService.GetByThreadId(id));
+            result.Data.Messages = (await _messageService.GetByThreadId(id)).Data;
             return result;
         }
 
         public async Task<ResultContainer<ICollection<ThreadModelDto>>> GetByName(string name)
         {
             var result = new ResultContainer<ICollection<ThreadModelDto>>();
-            
-            var thread = _threadRepository.Get<ThreadModel>
-                (t => t.Name.Contains(name))
-                .AsEnumerable().ToList();
+            var thread = _threadRepository.Get<ThreadModel>(t => t.Name.Contains(name));
             if (thread.Count == 0)
             {
                 result.ErrorType = ErrorType.NotFound;

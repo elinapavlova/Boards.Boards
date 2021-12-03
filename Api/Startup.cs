@@ -8,6 +8,7 @@ using Core.Profiles;
 using Core.Services.Board;
 using Core.Services.Category;
 using Core.Services.FileStorage;
+using Core.Services.Message;
 using Core.Services.Thread;
 using Database;
 using Database.Repositories.Base;
@@ -47,6 +48,10 @@ namespace Api
             {
                 client.BaseAddress = new Uri(Configuration["BaseAddress:FileStorage"]);
             });
+            services.AddHttpClient<IMessageService, MessageService>("MessageService", client =>
+            {
+                client.BaseAddress = new Uri(Configuration["BaseAddress:MessageService"]);
+            });
             
             var key = Encoding.ASCII.GetBytes(Configuration["AppOptions:Secret"]);
             
@@ -62,6 +67,7 @@ namespace Api
             services.AddScoped<IThreadRepository, ThreadRepository>();
             services.AddScoped<IFileRepository, FileRepository>();
 
+            services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IBoardService, BoardService>();
             services.AddScoped<IThreadService, ThreadService>();
