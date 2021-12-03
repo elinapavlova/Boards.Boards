@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Common.Base;
@@ -22,15 +23,15 @@ namespace Database.Repositories.Base
         
         public async Task<TModel> Create<TModel>(TModel item) where TModel : BaseModel
         {
-            item.DateCreated = DateTime.UtcNow;
+            item.DateCreated = DateTime.Now;
             await _context.Set<TModel>().AddAsync(item);
             await _context.SaveChangesAsync();
             return item;
         }
         
-        public IQueryable<TEntity> Get<TEntity>(Func<TEntity, bool> predicate) where TEntity : BaseModel
+        public List<TEntity> Get<TEntity>(Func<TEntity, bool> predicate) where TEntity : BaseModel
         {
-            return _context.Set<TEntity>().AsNoTracking().AsEnumerable().Where(predicate).AsQueryable();
+            return _context.Set<TEntity>().AsNoTracking().AsEnumerable().Where(predicate).ToList();
         }
 
         public async Task<TEntity> GetById<TEntity>(Guid id) where TEntity : BaseModel

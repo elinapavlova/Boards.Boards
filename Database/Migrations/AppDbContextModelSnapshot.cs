@@ -100,7 +100,7 @@ namespace Database.Migrations
 
                     b.HasIndex("ThreadId");
 
-                    b.ToTable("FileModel");
+                    b.ToTable("Files");
                 });
 
             modelBuilder.Entity("Database.Models.ThreadModel", b =>

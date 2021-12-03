@@ -8,6 +8,7 @@ namespace Database
         public DbSet<BoardModel> Boards { get; set; }
         public DbSet<CategoryModel> Categories { get; set; }
         public DbSet<ThreadModel> Threads { get; set; }
+        public DbSet<FileModel> Files { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) {}
 
