@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{0DB6FFA7-2E06-4B70-87D9-9A35EC001384}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boards.BoardService.Api", "Boards.BoardService.Api\Boards.BoardService.Api.csproj", "{0DB6FFA7-2E06-4B70-87D9-9A35EC001384}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\AuthService\Common\Common.csproj", "{451D2F5A-C9D1-4C4C-812A-A51BE604FD24}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "Core\Core.csproj", "{9D9DC577-F068-4DA0-B18A-FF730F561A5C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boards.BoardService.Core", "Boards.BoardService.Core\Boards.BoardService.Core.csproj", "{9D9DC577-F068-4DA0-B18A-FF730F561A5C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{866147AD-800E-4D90-B3D0-4BD9E752C3DF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boards.BoardService.Database", "Boards.BoardService.Database\Boards.BoardService.Database.csproj", "{866147AD-800E-4D90-B3D0-4BD9E752C3DF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
