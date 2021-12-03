@@ -74,7 +74,6 @@ namespace Boards.BoardService.Api
             services.AddScoped<IFileStorageService, FileStorageService>();
 
             var connection = Configuration.GetConnectionString("DefaultConnection");
-            //services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(connection));
             services.AddDbContext<AppDbContext>(options => options.UseNpgsql(connection,  
                 x => x.MigrationsAssembly("Boards.BoardService.Database")));
             
@@ -138,7 +137,7 @@ namespace Boards.BoardService.Api
                 options.DefaultApiVersion = new ApiVersion(1, 0);
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.ReportApiVersions = true;
-                options.ApiVersionReader = new UrlSegmentApiVersionReader();
+                options.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
             
             services.AddVersionedApiExplorer(options =>

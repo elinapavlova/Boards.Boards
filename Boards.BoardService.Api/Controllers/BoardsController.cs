@@ -13,7 +13,7 @@ namespace Boards.BoardService.Api.Controllers
 {
     [ApiVersion("1.0")]
     [ApiController]
-    [Route("/api/v{version:apiVersion}/[controller]")]
+    [Route("/api/[controller]")]
     public class BoardsController : BaseController
     {
         private readonly IBoardService _boardService;
