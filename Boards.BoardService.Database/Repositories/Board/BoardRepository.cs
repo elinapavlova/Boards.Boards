@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Base;
-using Common.Options;
+using Boards.Common.Options;
 
 namespace Boards.BoardService.Database.Repositories.Board
 {

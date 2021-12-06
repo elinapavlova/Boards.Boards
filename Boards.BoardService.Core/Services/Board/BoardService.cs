@@ -6,14 +6,14 @@ using Boards.BoardService.Core.Dto.Board;
 using Boards.BoardService.Core.Dto.Board.Create;
 using Boards.BoardService.Core.Dto.Board.Update;
 using Boards.BoardService.Core.Dto.Thread;
-using Common.Error;
-using Common.Result;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Board;
 using Boards.BoardService.Database.Repositories.Category;
 using Boards.BoardService.Database.Repositories.Thread;
-using Common.Filter;
-using Common.Options;
+using Boards.Common.Error;
+using Boards.Common.Filter;
+using Boards.Common.Options;
+using Boards.Common.Result;
 
 namespace Boards.BoardService.Core.Services.Board
 {

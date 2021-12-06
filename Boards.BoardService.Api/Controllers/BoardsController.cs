@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Common.Result;
 using Boards.BoardService.Core.Dto.Board;
 using Boards.BoardService.Core.Dto.Board.Create;
 using Boards.BoardService.Core.Dto.Board.Update;
 using Boards.BoardService.Core.Services.Board;
-using Common.Filter;
+using Boards.Common.Filter;
+using Boards.Common.Result;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

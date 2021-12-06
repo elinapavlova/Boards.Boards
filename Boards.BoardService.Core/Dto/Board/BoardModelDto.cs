@@ -1,5 +1,5 @@
 ﻿using System;
-using Common.Base;
+using Boards.Common.Base;
 
 namespace Boards.BoardService.Core.Dto.Board
 {

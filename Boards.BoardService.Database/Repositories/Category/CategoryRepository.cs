@@ -1,5 +1,5 @@
 ﻿using Boards.BoardService.Database.Repositories.Base;
-using Common.Options;
+using Boards.Common.Options;
 
 namespace Boards.BoardService.Database.Repositories.Category
 {

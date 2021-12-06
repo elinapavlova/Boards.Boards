@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Boards.BoardService.Core.Dto.Category;
 using Boards.BoardService.Core.Dto.Category.Create;
 using Boards.BoardService.Core.Dto.Category.Update;
-using Common.Result;
+using Boards.Common.Result;
 
 namespace Boards.BoardService.Core.Services.Category
 {

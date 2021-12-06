@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Common.Base;
-using Common.Filter;
-using Common.Options;
+using Boards.Common.Base;
+using Boards.Common.Filter;
+using Boards.Common.Options;
 using Microsoft.EntityFrameworkCore;
 
 namespace Boards.BoardService.Database.Repositories.Base

@@ -4,12 +4,12 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Boards.BoardService.Core.Dto.Message;
-using Common.Error;
-using Common.Result;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Thread;
-using Common.Filter;
-using Common.Options;
+using Boards.Common.Error;
+using Boards.Common.Filter;
+using Boards.Common.Options;
+using Boards.Common.Result;
 using Newtonsoft.Json;
 
 namespace Boards.BoardService.Core.Services.Message

@@ -9,13 +9,13 @@ using Boards.BoardService.Core.Dto.Thread;
 using Boards.BoardService.Core.Dto.Thread.Create;
 using Boards.BoardService.Core.Services.FileStorage;
 using Boards.BoardService.Core.Services.Message;
-using Common.Error;
-using Common.Result;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Board;
 using Boards.BoardService.Database.Repositories.Thread;
-using Common.Filter;
-using Common.Options;
+using Boards.Common.Error;
+using Boards.Common.Filter;
+using Boards.Common.Options;
+using Boards.Common.Result;
 
 namespace Boards.BoardService.Core.Services.Thread
 {

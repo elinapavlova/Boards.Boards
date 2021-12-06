@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Boards.BoardService.Core.Dto.File;
 using Boards.BoardService.Core.Dto.File.Upload;
-using Common.Error;
-using Common.Result;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.File;
+using Boards.Common.Error;
+using Boards.Common.Result;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 

@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using Boards.BoardService.Core.Dto.Board;
 using Boards.BoardService.Core.Dto.Board.Create;
 using Boards.BoardService.Core.Dto.Board.Update;
-using Common.Filter;
-using Common.Result;
+using Boards.Common.Filter;
+using Boards.Common.Result;
 
 namespace Boards.BoardService.Core.Services.Board
 {
