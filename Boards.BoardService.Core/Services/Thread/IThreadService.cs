@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Boards.BoardService.Core.Dto.Thread;
 using Boards.BoardService.Core.Dto.Thread.Create;
+using Common.Filter;
 using Common.Result;
 
 namespace Boards.BoardService.Core.Services.Thread
@@ -10,9 +11,8 @@ namespace Boards.BoardService.Core.Services.Thread
     public interface IThreadService
     {
         Task<ResultContainer<CreateThreadResponseDto>> Create(CreateThreadRequestDto data);
-        Task<ResultContainer<ThreadResponseDto>> GetById(Guid id);
-        Task<ResultContainer<ICollection<ThreadModelDto>>> GetByName(string name);
+        Task<ResultContainer<ThreadResponseDto>> GetById(Guid id, FilterPagingDto filter);
+        Task<ResultContainer<ICollection<ThreadModelDto>>> GetByName(string name, FilterPagingDto filter);
         Task<ResultContainer<ThreadModelDto>> Delete(Guid id);
-        Task<ResultContainer<ICollection<ThreadModelDto>>> GetByBoardId(Guid id);
     }
 }

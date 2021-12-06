@@ -60,6 +60,10 @@ namespace Boards.BoardService.Api
             services.Configure<AppOptions>(Configuration.GetSection(AppOptions.App));
             var tokenOptions = Configuration.GetSection(AppOptions.App).Get<AppOptions>();
             services.AddSingleton(tokenOptions);
+            
+            services.Configure<PagingOptions>(Configuration.GetSection(PagingOptions.Paging));
+            var pagingOptions = Configuration.GetSection(PagingOptions.Paging).Get<PagingOptions>();
+            services.AddSingleton(pagingOptions);
 
             services.AddScoped<IBaseRepository, BaseRepository>();
             services.AddScoped<IBoardRepository, BoardRepository>();

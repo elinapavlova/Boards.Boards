@@ -8,6 +8,6 @@ namespace Boards.BoardService.Database.Repositories.Thread
 {
     public interface IThreadRepository : IBaseRepository
     {
-        Task<ICollection<ThreadModel>> GetByBoardId(Guid id);
+        Task<ICollection<ThreadModel>> GetByBoardId(Guid id, int pageNumber, int pageSize);
     }
 }

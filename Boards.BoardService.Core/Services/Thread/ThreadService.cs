@@ -14,6 +14,8 @@ using Common.Result;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Board;
 using Boards.BoardService.Database.Repositories.Thread;
+using Common.Filter;
+using Common.Options;
 
 namespace Boards.BoardService.Core.Services.Thread
 {
@@ -24,6 +26,7 @@ namespace Boards.BoardService.Core.Services.Thread
         private readonly IFileStorageService _fileStorageService;
         private readonly IMessageService _messageService;
         private readonly IMapper _mapper;
+        private readonly PagingOptions _pagingOptions;
 
         public ThreadService
         (
@@ -31,7 +34,8 @@ namespace Boards.BoardService.Core.Services.Thread
             IBoardRepository boardRepository,
             IFileStorageService fileStorageService,
             IMessageService messageService,
-            IMapper mapper
+            IMapper mapper,
+            PagingOptions pagingOptions
         )
         {
             _threadRepository = threadRepository;
@@ -39,6 +43,7 @@ namespace Boards.BoardService.Core.Services.Thread
             _fileStorageService = fileStorageService;
             _messageService = messageService;
             _mapper = mapper;
+            _pagingOptions = pagingOptions;
         }
 
         public async Task<ResultContainer<CreateThreadResponseDto>> Create(CreateThreadRequestDto data)
@@ -80,7 +85,7 @@ namespace Boards.BoardService.Core.Services.Thread
             return result;
         }
 
-        public async Task<ResultContainer<ThreadResponseDto>> GetById(Guid id)
+        public async Task<ResultContainer<ThreadResponseDto>> GetById(Guid id, FilterPagingDto filter)
         {
             var result = new ResultContainer<ThreadResponseDto>();
             var thread = await _threadRepository.GetById<ThreadModel>(id);
@@ -92,21 +97,30 @@ namespace Boards.BoardService.Core.Services.Thread
 
             result = _mapper.Map<ResultContainer<ThreadResponseDto>>(thread);
             result.Data.Files = _mapper.Map<ICollection<FileResponseDto>>(await _fileStorageService.GetByThreadId(id));
-            result.Data.Messages = (await _messageService.GetByThreadId(id)).Data;
+            result.Data.Messages = (await _messageService.GetByThreadId(id, filter)).Data;
             return result;
         }
 
-        public async Task<ResultContainer<ICollection<ThreadModelDto>>> GetByName(string name)
+        public async Task<ResultContainer<ICollection<ThreadModelDto>>> GetByName(string name, FilterPagingDto paging)
         {
             var result = new ResultContainer<ICollection<ThreadModelDto>>();
-            var thread = _threadRepository.Get<ThreadModel>(t => t.Name.Contains(name));
-            if (thread.Count == 0)
+            var filter = new BaseFilterDto
+            {
+                Paging = paging
+            };
+            
+            var threads = await _threadRepository.GetFiltered
+            (_threadRepository.Get<ThreadModel>(t => t.Name.Contains(name)), filter);
+            if (threads.Count == 0 && paging.PageNumber > _pagingOptions.DefaultPageNumber)
             {
                 result.ErrorType = ErrorType.NotFound;
                 return result;
             }
 
-            result = _mapper.Map<ResultContainer<ICollection<ThreadModelDto>>>(thread);
+            foreach(var thread in threads)
+               thread.Files = _mapper.Map<ICollection<FileModel>>(await _fileStorageService.GetByThreadId(thread.Id));
+            
+            result = _mapper.Map<ResultContainer<ICollection<ThreadModelDto>>>(threads);
             return result;
         }
 
@@ -121,19 +135,6 @@ namespace Boards.BoardService.Core.Services.Thread
             }
 
             result = _mapper.Map<ResultContainer<ThreadModelDto>>(thread);
-            return result;
-        }
-
-        public async Task<ResultContainer<ICollection<ThreadModelDto>>> GetByBoardId(Guid id)
-        {
-            var result = new ResultContainer<ICollection<ThreadModelDto>>();
-            var board = await _boardRepository.GetById<BoardModel>(id);
-            if (board == null)
-            {
-                result.ErrorType = ErrorType.NotFound;
-                return result;
-            }
-            result = _mapper.Map<ResultContainer<ICollection<ThreadModelDto>>>(await _threadRepository.GetByBoardId(id));
             return result;
         }
     }

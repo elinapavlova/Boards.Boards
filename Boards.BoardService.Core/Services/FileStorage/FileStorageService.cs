@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -35,7 +36,8 @@ namespace Boards.BoardService.Core.Services.FileStorage
 
         public async Task<ICollection<FileModel>> GetByThreadId(Guid id)
         {
-            var files = _fileRepository.Get<FileModel>(f => f.ThreadId == id && f.MessageId == null);
+            var files = _fileRepository.Get<FileModel>(f => f.ThreadId == id && f.MessageId == null)
+                .AsEnumerable().ToList();
             return files;
         }
         

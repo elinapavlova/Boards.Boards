@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Boards.BoardService.Core.Dto.Board;
 using Boards.BoardService.Core.Dto.Board.Create;
 using Boards.BoardService.Core.Dto.Board.Update;
+using Common.Filter;
 using Common.Result;
 
 namespace Boards.BoardService.Core.Services.Board
@@ -16,6 +17,6 @@ namespace Boards.BoardService.Core.Services.Board
         Task<ResultContainer<BoardModelDto>> Delete(Guid id);
         Task<ResultContainer<BoardModelDto>> Update(UpdateBoardRequestDto data);
         Task<ResultContainer<ICollection<BoardModelDto>>> GetByCategoryId(Guid id);
-        Task<ResultContainer<BoardResponseDto>> GetByIdWithThreads(Guid id);
+        Task<ResultContainer<BoardResponseDto>> GetByIdWithThreads(Guid id, FilterPagingDto filter);
     }
 }

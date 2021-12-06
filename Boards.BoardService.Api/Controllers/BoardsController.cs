@@ -5,6 +5,7 @@ using Boards.BoardService.Core.Dto.Board;
 using Boards.BoardService.Core.Dto.Board.Create;
 using Boards.BoardService.Core.Dto.Board.Update;
 using Boards.BoardService.Core.Services.Board;
+using Common.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -108,8 +109,8 @@ namespace Boards.BoardService.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<BoardResponseDto>> GetByIdWithThreads(Guid id)
+        public async Task<ActionResult<BoardResponseDto>> GetByIdWithThreads(Guid id, [FromQuery] FilterPagingDto filter)
             => await ReturnResult<ResultContainer<BoardResponseDto>, BoardResponseDto>
-                (_boardService.GetByIdWithThreads(id));
+                (_boardService.GetByIdWithThreads(id, filter));
     }
 }

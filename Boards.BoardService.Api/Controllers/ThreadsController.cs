@@ -5,6 +5,7 @@ using Common.Result;
 using Boards.BoardService.Core.Dto.Thread;
 using Boards.BoardService.Core.Dto.Thread.Create;
 using Boards.BoardService.Core.Services.Thread;
+using Common.Filter;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,34 +35,36 @@ namespace Boards.BoardService.Api.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<CreateThreadResponseDto>> Create([FromForm] CreateThreadRequestDto thread)
             => await ReturnResult<ResultContainer<CreateThreadResponseDto>, CreateThreadResponseDto>
-                (_threadService.Create(thread)); 
-        
+                (_threadService.Create(thread));
+
         /// <summary>
         /// Get thread by Id
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="filter"></param>
         /// <response code="200">Return thread</response>
         /// <response code="404">If the thread doesn't exist</response>
         [HttpGet("{id:guid}")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ThreadResponseDto>> GetById(Guid id)
-            => await ReturnResult<ResultContainer<ThreadResponseDto>, ThreadResponseDto>(_threadService.GetById(id)); 
-        
+        public async Task<ActionResult<ThreadResponseDto>> GetById(Guid id, [FromQuery] FilterPagingDto filter)
+            => await ReturnResult<ResultContainer<ThreadResponseDto>, ThreadResponseDto>(_threadService.GetById(id, filter));
+
         /// <summary>
         /// Get thread by name
         /// </summary>
         /// <param name="name"></param>
+        /// <param name="filter"></param>
         /// <response code="200">Return thread</response>
         /// <response code="404">If the thread doesn't exist</response>
         [HttpGet("{name}")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ICollection<ThreadModelDto>>> GetByName(string name)
+        public async Task<ActionResult<ICollection<ThreadModelDto>>> GetByName(string name, [FromQuery] FilterPagingDto filter)
             => await ReturnResult<ResultContainer<ICollection<ThreadModelDto>>, ICollection<ThreadModelDto>>
-                (_threadService.GetByName(name)); 
+                (_threadService.GetByName(name, filter)); 
         
         /// <summary>
         /// Delete thread

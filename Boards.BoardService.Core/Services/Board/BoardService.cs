@@ -5,34 +5,40 @@ using AutoMapper;
 using Boards.BoardService.Core.Dto.Board;
 using Boards.BoardService.Core.Dto.Board.Create;
 using Boards.BoardService.Core.Dto.Board.Update;
-using Boards.BoardService.Core.Services.Thread;
+using Boards.BoardService.Core.Dto.Thread;
 using Common.Error;
 using Common.Result;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Board;
 using Boards.BoardService.Database.Repositories.Category;
+using Boards.BoardService.Database.Repositories.Thread;
+using Common.Filter;
+using Common.Options;
 
 namespace Boards.BoardService.Core.Services.Board
 {
     public class BoardService : IBoardService
     {
         private readonly IBoardRepository _boardRepository;
-        private readonly IThreadService _threadService;
+        private readonly IThreadRepository _threadRepository;
         private readonly IMapper _mapper;
         private readonly ICategoryRepository _categoryRepository;
+        private readonly PagingOptions _pagingOptions;
 
         public BoardService 
         (
             IBoardRepository boardRepository, 
-            IThreadService threadService,
+            IThreadRepository threadRepository,
             IMapper mapper,
-            ICategoryRepository categoryRepository
+            ICategoryRepository categoryRepository,
+            PagingOptions pagingOptions
         )
         {
             _boardRepository = boardRepository;
-            _threadService = threadService;
+            _threadRepository = threadRepository;
             _mapper = mapper;
             _categoryRepository = categoryRepository;
+            _pagingOptions = pagingOptions;
         }
         
         public async Task<ResultContainer<BoardModelDto>> Create(CreateBoardModelDto data)
@@ -132,23 +138,29 @@ namespace Boards.BoardService.Core.Services.Board
             return result;
         }
 
-        public async Task<ResultContainer<BoardResponseDto>> GetByIdWithThreads(Guid id)
+        public async Task<ResultContainer<BoardResponseDto>> GetByIdWithThreads(Guid id, FilterPagingDto filter)
         {
             var result = new ResultContainer<BoardResponseDto>
             {
                 Data = new BoardResponseDto()
             };
             var board = await _boardRepository.GetById<BoardModel>(id);
+            if (board == null)
+            {
+                result.ErrorType = ErrorType.NotFound;
+                return result;
+            }
             
-            var threads = await _threadService.GetByBoardId(id);
-            if ( threads.ErrorType.HasValue)
+            var threads = _mapper.Map<ICollection<ThreadModelDto>>
+                (await _threadRepository.GetByBoardId(id, filter.PageNumber, filter.PageSize));
+            if ( threads.Count == 0 && filter.PageNumber > _pagingOptions.DefaultPageNumber)
             {
                 result.ErrorType = ErrorType.NotFound;
                 return result;
             }
 
             result = _mapper.Map<ResultContainer<BoardResponseDto>>(board);
-            result.Data.Threads =  threads.Data;
+            result.Data.Threads =  threads;
             return result;
         }
     }
