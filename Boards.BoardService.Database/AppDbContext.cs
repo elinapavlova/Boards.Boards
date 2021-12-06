@@ -26,12 +26,14 @@ namespace Boards.BoardService.Database
                     .WithMany(c => c.Boards)
                     .HasForeignKey(b => b.CategoryId);
             });
+            builder.Entity<BoardModel>().HasIndex(b => b.Name).IsUnique();
 
             builder.Entity<CategoryModel>(category =>
             {
                 category.Property(c => c.Name).IsRequired().HasMaxLength(100);
                 category.Property(c => c.DateCreated).IsRequired();
             });
+            builder.Entity<CategoryModel>().HasIndex(b => b.Name).IsUnique();
 
             builder.Entity<ThreadModel>(thread =>
             {
