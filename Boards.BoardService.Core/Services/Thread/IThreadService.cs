@@ -11,7 +11,8 @@ namespace Boards.BoardService.Core.Services.Thread
     public interface IThreadService
     {
         Task<ResultContainer<CreateThreadResponseDto>> Create(CreateThreadRequestDto data);
-        Task<ResultContainer<ThreadResponseDto>> GetById(Guid id, FilterPagingDto filter);
+        Task<ResultContainer<ThreadResponseDto>> GetByIdWithMessages(Guid id, FilterPagingDto filter);
+        Task<ResultContainer<ThreadModelDto>> GetById(Guid id);
         Task<ResultContainer<ICollection<ThreadModelDto>>> GetByName(string name, FilterPagingDto filter);
         Task<ResultContainer<ThreadModelDto>> Delete(Guid id);
     }

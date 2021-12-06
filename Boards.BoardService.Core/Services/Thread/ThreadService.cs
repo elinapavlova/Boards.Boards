@@ -85,7 +85,23 @@ namespace Boards.BoardService.Core.Services.Thread
             return result;
         }
 
-        public async Task<ResultContainer<ThreadResponseDto>> GetById(Guid id, FilterPagingDto filter)
+        public async Task<ResultContainer<ThreadModelDto>> GetById(Guid id)
+        {
+            var result = new ResultContainer<ThreadModelDto>();
+            var thread = await _threadRepository.GetById<ThreadModel>(id);
+            if (thread == null)
+            {
+                result.ErrorType = ErrorType.NotFound;
+                return result;
+            }
+
+            result = _mapper.Map<ResultContainer<ThreadModelDto>>(thread);
+            result.Data.Files = _mapper.Map<ICollection<FileResponseDto>>(await _fileStorageService.GetByThreadId(id));
+            return result;
+        }
+
+        
+        public async Task<ResultContainer<ThreadResponseDto>> GetByIdWithMessages(Guid id, FilterPagingDto filter)
         {
             var result = new ResultContainer<ThreadResponseDto>();
             var thread = await _threadRepository.GetById<ThreadModel>(id);

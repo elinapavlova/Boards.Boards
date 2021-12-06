@@ -41,15 +41,29 @@ namespace Boards.BoardService.Api.Controllers
         /// Get thread by Id
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="filter"></param>
         /// <response code="200">Return thread</response>
         /// <response code="404">If the thread doesn't exist</response>
         [HttpGet("{id:guid}")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<ThreadResponseDto>> GetById(Guid id, [FromQuery] FilterPagingDto filter)
-            => await ReturnResult<ResultContainer<ThreadResponseDto>, ThreadResponseDto>(_threadService.GetById(id, filter));
+        public async Task<ActionResult<ThreadModelDto>> GetById(Guid id)
+            => await ReturnResult<ResultContainer<ThreadModelDto>, ThreadModelDto>(_threadService.GetById(id));
+        
+        /// <summary>
+        /// Get thread by Id with messages
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="filter"></param>
+        /// <response code="200">Return thread</response>
+        /// <response code="404">If the thread doesn't exist</response>
+        [HttpGet("With-Messages/{id:guid}")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<ThreadResponseDto>> GetByIdWithMessages(Guid id, [FromQuery] FilterPagingDto filter)
+            => await ReturnResult<ResultContainer<ThreadResponseDto>, ThreadResponseDto>
+                (_threadService.GetByIdWithMessages(id, filter));
 
         /// <summary>
         /// Get thread by name
