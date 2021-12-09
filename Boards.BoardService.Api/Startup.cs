@@ -19,6 +19,7 @@ using Boards.Common.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
@@ -58,8 +59,8 @@ namespace Boards.BoardService.Api
             ConfigureSwagger(services);
             
             services.Configure<AppOptions>(Configuration.GetSection(AppOptions.App));
-            var tokenOptions = Configuration.GetSection(AppOptions.App).Get<AppOptions>();
-            services.AddSingleton(tokenOptions);
+            var appOptions = Configuration.GetSection(AppOptions.App).Get<AppOptions>();
+            services.AddSingleton(appOptions);
             
             services.Configure<PagingOptions>(Configuration.GetSection(PagingOptions.Paging));
             var pagingOptions = Configuration.GetSection(PagingOptions.Paging).Get<PagingOptions>();
@@ -141,7 +142,7 @@ namespace Boards.BoardService.Api
                 options.DefaultApiVersion = new ApiVersion(1, 0);
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.ReportApiVersions = true;
-                options.ApiVersionReader = new HeaderApiVersionReader("api-version");
+                options.ApiVersionReader = new UrlSegmentApiVersionReader();
             });
             
             services.AddVersionedApiExplorer(options =>

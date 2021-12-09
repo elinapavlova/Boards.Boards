@@ -14,7 +14,7 @@ namespace Boards.BoardService.Api.Controllers
 {
     [ApiVersion("1.0")]
     [ApiController]
-    [Route("/api/[controller]")]
+    [Route("/api/v{version:apiVersion}/[controller]")]
     public class ThreadsController : BaseController
     {
         private readonly IThreadService _threadService;
@@ -56,7 +56,7 @@ namespace Boards.BoardService.Api.Controllers
         /// <param name="id"></param>
         /// <param name="filter"></param>
         /// <response code="200">Return thread</response>
-        /// <response code="404">If the thread doesn't exist</response>
+        /// <response code="404">If the thread or messages on page doesn't exist</response>
         [HttpGet("With-Messages/{id:guid}")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -66,7 +66,7 @@ namespace Boards.BoardService.Api.Controllers
                 (_threadService.GetByIdWithMessages(id, filter));
 
         /// <summary>
-        /// Get thread by name
+        /// Get threads by name
         /// </summary>
         /// <param name="name"></param>
         /// <param name="filter"></param>

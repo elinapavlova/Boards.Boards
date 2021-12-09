@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 using AutoMapper;
 using Boards.BoardService.Core.Dto.File;
-using Boards.BoardService.Core.Dto.File.Upload;
 using Boards.BoardService.Core.Dto.Thread;
 using Boards.BoardService.Core.Dto.Thread.Create;
 using Boards.BoardService.Core.Services.FileStorage;
@@ -49,7 +49,7 @@ namespace Boards.BoardService.Core.Services.Thread
         public async Task<ResultContainer<CreateThreadResponseDto>> Create(CreateThreadRequestDto data)
         {
             var result = new ResultContainer<CreateThreadResponseDto>();
-            var resultUpload = new ResultContainer<UploadFilesResponseDto>();
+            var resultUpload = new List<FileResponseDto>();
 
             // Если название или текст пустые
             if (string.IsNullOrEmpty(data.Name) || string.IsNullOrEmpty(data.Text))
@@ -74,10 +74,11 @@ namespace Boards.BoardService.Core.Services.Thread
             if (data.Files != null)
                 resultUpload = await _fileStorageService.Upload(data.Files, result.Data.Id);
 
-            if (resultUpload.Data != null)
-                result.Data.Files = resultUpload.Data.Files;
+            if (resultUpload != null)
+                foreach (var file in resultUpload)
+                    result.Data.Files.Add(file.Url);
 
-            if (resultUpload.ErrorType.HasValue)
+            if (resultUpload == null)
                 result.ErrorType = ErrorType.BadRequest;
             else 
                 scope.Complete();
@@ -96,10 +97,10 @@ namespace Boards.BoardService.Core.Services.Thread
             }
 
             result = _mapper.Map<ResultContainer<ThreadModelDto>>(thread);
-            result.Data.Files = _mapper.Map<ICollection<FileResponseDto>>(await _fileStorageService.GetByThreadId(id));
+            result.Data.Files = _mapper.Map<ICollection<Uri>>((await _fileStorageService.GetByThreadId(id))
+                .Select(f => f.Url));
             return result;
         }
-
         
         public async Task<ResultContainer<ThreadResponseDto>> GetByIdWithMessages(Guid id, FilterPagingDto filter)
         {
@@ -112,8 +113,16 @@ namespace Boards.BoardService.Core.Services.Thread
             }
 
             result = _mapper.Map<ResultContainer<ThreadResponseDto>>(thread);
-            result.Data.Files = _mapper.Map<ICollection<FileResponseDto>>(await _fileStorageService.GetByThreadId(id));
-            result.Data.Messages = (await _messageService.GetByThreadId(id, filter)).Data;
+            result.Data.Files = await _fileStorageService.GetByThreadId(id);
+
+            var messages = await _messageService.GetByThreadId(id, filter);
+
+            if (messages.ErrorType.HasValue)
+            {
+                result.ErrorType = ErrorType.NotFound;
+                return result;
+            }
+            result.Data.Messages = messages.Data;
             return result;
         }
 
@@ -133,10 +142,11 @@ namespace Boards.BoardService.Core.Services.Thread
                 return result;
             }
 
-            foreach(var thread in threads)
-               thread.Files = _mapper.Map<ICollection<FileModel>>(await _fileStorageService.GetByThreadId(thread.Id));
-            
             result = _mapper.Map<ResultContainer<ICollection<ThreadModelDto>>>(threads);
+            foreach(var thread in result.Data)
+               thread.Files  = _mapper.Map<ICollection<Uri>>((await _fileStorageService.GetByThreadId(thread.Id))
+                   .Select(f => f.Url));
+            
             return result;
         }
 
