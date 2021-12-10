@@ -1,5 +1,5 @@
-﻿using Boards.BoardService.Database.Repositories.Base;
-using Boards.Common.Options;
+﻿using Boards.Auth.Common.Options;
+using Boards.BoardService.Database.Repositories.Base;
 
 namespace Boards.BoardService.Database.Repositories.File
 {

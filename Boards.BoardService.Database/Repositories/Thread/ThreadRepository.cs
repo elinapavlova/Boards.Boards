@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Boards.Auth.Common.Filter;
+using Boards.Auth.Common.Options;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Base;
-using Boards.Common.Filter;
-using Boards.Common.Options;
 
 namespace Boards.BoardService.Database.Repositories.Thread
 {

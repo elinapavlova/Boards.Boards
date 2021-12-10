@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Boards.Auth.Common.Filter;
+using Boards.Auth.Common.Result;
 using Boards.BoardService.Core.Dto.Message;
-using Boards.Common.Filter;
-using Boards.Common.Result;
 
 namespace Boards.BoardService.Core.Services.Message
 {

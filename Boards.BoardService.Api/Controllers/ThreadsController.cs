@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Boards.Auth.Common.Filter;
+using Boards.Auth.Common.Result;
 using Boards.BoardService.Core.Dto.Thread;
 using Boards.BoardService.Core.Dto.Thread.Create;
 using Boards.BoardService.Core.Services.Thread;
-using Boards.Common.Filter;
-using Boards.Common.Result;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

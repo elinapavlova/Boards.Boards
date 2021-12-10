@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using Boards.Auth.Common.Base;
 using Boards.BoardService.Core.Dto.File;
-using Boards.Common.Base;
 
 namespace Boards.BoardService.Core.Dto.Message
 {

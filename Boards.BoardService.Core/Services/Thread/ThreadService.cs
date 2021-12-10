@@ -4,6 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 using AutoMapper;
+using Boards.Auth.Common.Error;
+using Boards.Auth.Common.Filter;
+using Boards.Auth.Common.Options;
+using Boards.Auth.Common.Result;
 using Boards.BoardService.Core.Dto.File;
 using Boards.BoardService.Core.Dto.Thread;
 using Boards.BoardService.Core.Dto.Thread.Create;
@@ -12,10 +16,6 @@ using Boards.BoardService.Core.Services.Message;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Board;
 using Boards.BoardService.Database.Repositories.Thread;
-using Boards.Common.Error;
-using Boards.Common.Filter;
-using Boards.Common.Options;
-using Boards.Common.Result;
 
 namespace Boards.BoardService.Core.Services.Thread
 {

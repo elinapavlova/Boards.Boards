@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using AutoMapper;
+using Boards.Auth.Common.Error;
+using Boards.Auth.Common.Result;
 using Boards.BoardService.Core.Dto.Category;
 using Boards.BoardService.Core.Dto.Category.Create;
 using Boards.BoardService.Core.Dto.Category.Update;
 using Boards.BoardService.Core.Services.Board;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Category;
-using Boards.Common.Error;
-using Boards.Common.Result;
 
 namespace Boards.BoardService.Core.Services.Category
 {

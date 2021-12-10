@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Boards.Auth.Common.Result;
 using Boards.BoardService.Core.Dto.Category;
 using Boards.BoardService.Core.Dto.Category.Create;
 using Boards.BoardService.Core.Dto.Category.Update;
-using Boards.Common.Result;
 
 namespace Boards.BoardService.Core.Services.Category
 {

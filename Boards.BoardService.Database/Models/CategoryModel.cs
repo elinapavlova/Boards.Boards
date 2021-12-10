@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Boards.Common.Base;
+using Boards.Auth.Common.Base;
 
 namespace Boards.BoardService.Database.Models
 {

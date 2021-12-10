@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using AutoMapper;
+using Boards.Auth.Common.Result;
 using Boards.BoardService.Core.Dto.Board;
 using Boards.BoardService.Core.Dto.Board.Create;
 using Boards.BoardService.Core.Dto.Category;
@@ -8,7 +9,6 @@ using Boards.BoardService.Core.Dto.File;
 using Boards.BoardService.Core.Dto.Thread;
 using Boards.BoardService.Core.Dto.Thread.Create;
 using Boards.BoardService.Database.Models;
-using Boards.Common.Result;
 
 namespace Boards.BoardService.Core.Profiles
 {

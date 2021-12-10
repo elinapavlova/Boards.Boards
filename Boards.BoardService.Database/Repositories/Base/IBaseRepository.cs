@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Boards.Common.Base;
-using Boards.Common.Filter;
+using Boards.Auth.Common.Base;
+using Boards.Auth.Common.Filter;
 
 namespace Boards.BoardService.Database.Repositories.Base
 {

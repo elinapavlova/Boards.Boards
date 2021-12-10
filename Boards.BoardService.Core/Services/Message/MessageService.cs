@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using Boards.Auth.Common.Error;
+using Boards.Auth.Common.Filter;
+using Boards.Auth.Common.Options;
+using Boards.Auth.Common.Result;
 using Boards.BoardService.Core.Dto.Message;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Thread;
-using Boards.Common.Error;
-using Boards.Common.Filter;
-using Boards.Common.Options;
-using Boards.Common.Result;
 using Newtonsoft.Json;
 
 namespace Boards.BoardService.Core.Services.Message

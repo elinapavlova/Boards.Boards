@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Boards.Auth.Common.Result;
 using Boards.BoardService.Core.Dto.Category;
 using Boards.BoardService.Core.Dto.Category.Create;
 using Boards.BoardService.Core.Dto.Category.Update;
 using Boards.BoardService.Core.Services.Category;
-using Boards.Common.Result;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
