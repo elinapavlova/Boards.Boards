@@ -104,7 +104,7 @@ namespace Boards.BoardService.Api.Controllers
         /// </summary>
         /// <response code="200">Return the board with threads</response>
         /// <response code="404">If the board doesn't exist</response>
-        [HttpGet("With-Threads/{id:guid}")]
+        [HttpGet("{id:guid}/threads")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

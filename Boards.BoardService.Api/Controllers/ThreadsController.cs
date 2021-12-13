@@ -57,7 +57,7 @@ namespace Boards.BoardService.Api.Controllers
         /// <param name="filter"></param>
         /// <response code="200">Return thread</response>
         /// <response code="404">If the thread or messages on page doesn't exist</response>
-        [HttpGet("With-Messages/{id:guid}")]
+        [HttpGet("{id:guid}/messages")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -94,7 +94,7 @@ namespace Boards.BoardService.Api.Controllers
         /// </summary>
         /// <response code="200">Return boards list</response>
         /// <response code="404">If the category doesn't exist</response>
-        [HttpGet("With-Boards/{id:guid}")]
+        [HttpGet("{id:guid}/boards")]
         [AllowAnonymous]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
