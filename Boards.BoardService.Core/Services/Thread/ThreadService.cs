@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Transactions;
 using AutoMapper;
@@ -97,8 +96,7 @@ namespace Boards.BoardService.Core.Services.Thread
             }
 
             result = _mapper.Map<ResultContainer<ThreadModelDto>>(thread);
-            result.Data.Files = _mapper.Map<ICollection<Uri>>((await _fileStorageService.GetByThreadId(id))
-                .Select(f => f.Url));
+            result.Data.Files = _mapper.Map<ICollection<Uri>>((await _fileStorageService.GetByThreadId(id)));
             return result;
         }
         
@@ -144,8 +142,7 @@ namespace Boards.BoardService.Core.Services.Thread
 
             result = _mapper.Map<ResultContainer<ICollection<ThreadModelDto>>>(threads);
             foreach(var thread in result.Data)
-               thread.Files  = _mapper.Map<ICollection<Uri>>((await _fileStorageService.GetByThreadId(thread.Id))
-                   .Select(f => f.Url));
+               thread.Files  = _mapper.Map<ICollection<Uri>>((await _fileStorageService.GetByThreadId(thread.Id)));
             
             return result;
         }

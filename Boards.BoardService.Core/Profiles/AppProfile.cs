@@ -25,10 +25,10 @@ namespace Boards.BoardService.Core.Profiles
                 .ForMember(x => x.Files, opt 
                     => opt.Ignore());
             
-            
+
             CreateMap<FileResponseDto, FileModel>();
             CreateMap<FileModel, FileResponseDto>();
-            
+            CreateMap<FileModel, FileResultDto>();
 
             CreateMap<BoardModel, BoardModelDto>();
             CreateMap<BoardModel, BoardResponseDto>();

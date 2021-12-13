@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ using Boards.BoardService.Core.Dto.File;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.File;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Boards.BoardService.Core.Services.FileStorage
@@ -29,12 +31,21 @@ namespace Boards.BoardService.Core.Services.FileStorage
             _fileRepository = fileRepository;
         }
 
-        public async Task<ICollection<FileResultDto>> GetByThreadId(Guid id)
+        public async Task<Collection<FileContentResult>> GetByThreadId(Guid id)
         {
-            using var client = _clientFactory.CreateClient("FileStorage");
-            var response = await client.PostAsync($"By-Thread-Id/{id}", null!);
-            var responseMessage = await response.Content.ReadAsStringAsync();
-            var result = JsonConvert.DeserializeObject<ICollection<FileResultDto>>(responseMessage);
+            var result = new Collection<FileContentResult>();
+            var files = await _fileRepository.GetByThreadId(id);
+            if (files == null)
+                return null;
+
+            foreach (var file in files)
+            {
+                using var client = _clientFactory.CreateClient("FileStorage");
+                var response = await client.GetAsync($"{file.Id}");
+                result.Add(new FileContentResult
+                    (await response.Content.ReadAsByteArrayAsync(), response.Content.Headers.ContentType.MediaType));
+            }
+
             return result;
         }
         
@@ -83,7 +94,6 @@ namespace Boards.BoardService.Core.Services.FileStorage
             foreach (var file in files)
             {
                 var newFile = _mapper.Map<FileModel>(file);
-                newFile.DateCreated = DateTime.Now;
                 newFile.ThreadId = threadId;
                 
                 await _fileRepository.Create(newFile);
