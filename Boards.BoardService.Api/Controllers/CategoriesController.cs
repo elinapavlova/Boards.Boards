@@ -90,7 +90,7 @@ namespace Boards.BoardService.Api.Controllers
             => await ReturnResult<ResultContainer<CategoryModelDto>, CategoryModelDto>(_categoryService.Delete(id)); 
         
         /// <summary>
-        /// Get category Id with boards
+        /// Get category by Id with boards
         /// </summary>
         /// <response code="200">Return boards list</response>
         /// <response code="404">If the category doesn't exist</response>
