@@ -108,6 +108,13 @@ namespace Boards.BoardService.Core.Services.Board
         {
             var result = new ResultContainer<BoardModelDto>();
             
+            var boardWithNewName = await _boardRepository.GetByName(data.NewName);
+            if (boardWithNewName == null)
+            {
+                result.ErrorType = ErrorType.BadRequest;
+                return result;
+            }
+            
             var board = await _boardRepository.GetByName(data.Name);
             if (board == null)
             {
@@ -143,6 +150,7 @@ namespace Boards.BoardService.Core.Services.Board
             {
                 Data = new BoardResponseDto()
             };
+            
             var board = await _boardRepository.GetById<BoardModel>(id);
             if (board == null)
             {

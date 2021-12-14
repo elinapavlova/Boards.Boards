@@ -89,6 +89,7 @@ namespace Boards.BoardService.Api.Controllers
         /// </summary>
         /// <response code="200">Return updated board</response>
         /// <response code="404">If the board doesn't exist</response>
+        /// <response code="400">If the board with new name already exists</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpPut]
         [Authorize]
