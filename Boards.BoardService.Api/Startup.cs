@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text;
 using AutoMapper;
 using Boards.Auth.Common.Options;
+using Boards.BoardService.Core.Options;
 using Boards.BoardService.Core.Profiles;
 using Boards.BoardService.Core.Services.Board;
 using Boards.BoardService.Core.Services.Category;
@@ -15,6 +16,7 @@ using Boards.BoardService.Database.Repositories.Base;
 using Boards.BoardService.Database.Repositories.Board;
 using Boards.BoardService.Database.Repositories.Category;
 using Boards.BoardService.Database.Repositories.File;
+using Boards.BoardService.Database.Repositories.Message;
 using Boards.BoardService.Database.Repositories.Thread;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -60,6 +62,10 @@ namespace Boards.BoardService.Api
             services.Configure<AppOptions>(Configuration.GetSection(AppOptions.App));
             var appOptions = Configuration.GetSection(AppOptions.App).Get<AppOptions>();
             services.AddSingleton(appOptions);
+
+            services.Configure<BaseAddresses>(Configuration.GetSection(BaseAddresses.BaseAddress));
+            var addressesOptions = Configuration.GetSection(BaseAddresses.BaseAddress).Get<BaseAddresses>();
+            services.AddSingleton(addressesOptions);
             
             services.Configure<PagingOptions>(Configuration.GetSection(PagingOptions.Paging));
             var pagingOptions = Configuration.GetSection(PagingOptions.Paging).Get<PagingOptions>();
@@ -70,6 +76,7 @@ namespace Boards.BoardService.Api
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<IThreadRepository, ThreadRepository>();
             services.AddScoped<IFileRepository, FileRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
 
             services.AddScoped<IMessageService, MessageService>();
             services.AddScoped<ICategoryService, CategoryService>();

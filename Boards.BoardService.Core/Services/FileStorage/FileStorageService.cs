@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using AutoMapper;
 using Boards.BoardService.Core.Dto.File;
+using Boards.BoardService.Core.Options;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.File;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace Boards.BoardService.Core.Services.FileStorage
@@ -19,34 +20,40 @@ namespace Boards.BoardService.Core.Services.FileStorage
         private readonly IHttpClientFactory _clientFactory;
         private readonly IFileRepository _fileRepository;
         private readonly IMapper _mapper;
+        private readonly Uri _fileStorageBaseAddress;
+        
         public FileStorageService
         (
             IHttpClientFactory clientFactory,
             IMapper mapper,
-            IFileRepository fileRepository
+            IFileRepository fileRepository,
+            BaseAddresses addresses
         )
         {
             _clientFactory = clientFactory;
             _mapper = mapper;
             _fileRepository = fileRepository;
+            _fileStorageBaseAddress = new Uri(addresses.FileStorage);
         }
 
-        public async Task<Collection<FileContentResult>> GetByThreadId(Guid id)
+        public async Task<Collection<Uri>> GetByThreadId(Guid id)
         {
-            var result = new Collection<FileContentResult>();
+            var result = new Collection<Uri>();
             var files = await _fileRepository.GetByThreadId(id);
             if (files == null)
                 return null;
-
+            
             foreach (var file in files)
-            {
-                using var client = _clientFactory.CreateClient("FileStorage");
-                var response = await client.GetAsync($"{file.Id}");
-                result.Add(new FileContentResult
-                    (await response.Content.ReadAsByteArrayAsync(), response.Content.Headers.ContentType.MediaType));
-            }
+                result.Add(CreateUrl(file.Path));
 
             return result;
+        }
+        
+        private Uri CreateUrl(string path)
+        {
+            var name = Path.GetFileName(path);
+            var url = new Uri(_fileStorageBaseAddress, name);
+            return url;
         }
         
         public async Task<List<FileResponseDto>> Upload(IFormFileCollection files, Guid threadId)
@@ -56,13 +63,17 @@ namespace Boards.BoardService.Core.Services.FileStorage
                 return null;
 
             using var client = _clientFactory.CreateClient("FileStorage");
+            
             var response = await client.PostAsync("Upload", content);
             var responseMessage = await response.Content.ReadAsStringAsync();
+            
             var result = JsonConvert.DeserializeObject<List<FileResponseDto>>(responseMessage);
-
             if (result == null)
                 return null;
 
+            foreach (var file in result)
+                file.Url = CreateUrl(file.Path);
+            
             await AddFilesToDatabase(threadId, result);
 
             return result;

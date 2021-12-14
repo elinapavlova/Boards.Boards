@@ -109,18 +109,18 @@ namespace Boards.BoardService.Core.Services.Thread
                 result.ErrorType = ErrorType.NotFound;
                 return result;
             }
-
+            
             result = _mapper.Map<ResultContainer<ThreadResponseDto>>(thread);
             result.Data.Files = await _fileStorageService.GetByThreadId(id);
 
             var messages = await _messageService.GetByThreadId(id, filter);
-
             if (messages.ErrorType.HasValue)
             {
                 result.ErrorType = ErrorType.NotFound;
                 return result;
             }
             result.Data.Messages = messages.Data;
+            
             return result;
         }
 
