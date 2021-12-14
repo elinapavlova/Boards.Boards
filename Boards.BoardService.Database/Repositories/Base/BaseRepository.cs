@@ -66,7 +66,6 @@ namespace Boards.BoardService.Database.Repositories.Base
             
             var result = _context.Set<TEntity>()
                 .AsNoTracking()
-                .AsQueryable()
                 .OrderByDescending(b => b.DateCreated)
                 .Where(predicate)
                 .Skip((pageNumber - 1) * pageSize)
