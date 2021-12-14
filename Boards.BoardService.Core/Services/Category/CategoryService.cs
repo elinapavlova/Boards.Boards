@@ -33,16 +33,14 @@ namespace Boards.BoardService.Core.Services.Category
         public async Task<ResultContainer<CategoryModelDto>> Create(CreateCategoryModelDto data)
         {
             var result = new ResultContainer<CategoryModelDto>();
-            var category = _categoryRepository.GetOne<CategoryModel>(b => b.Name == data.Name);
-
+            
+            var category = await _categoryRepository.GetByName(data.Name);
             if (category != null)
             {
                 result.ErrorType = ErrorType.BadRequest;
                 return result;
             }
-
             var newCategory = _mapper.Map<CreateCategoryModelDto, CategoryModel>(data);
-            newCategory.DateCreated = DateTime.Now;
 
             result = _mapper.Map<ResultContainer<CategoryModelDto>>(await _categoryRepository.Create(newCategory));
             return result;
@@ -51,7 +49,8 @@ namespace Boards.BoardService.Core.Services.Category
         public async Task<ResultContainer<CategoryModelDto>> GetByName(string name)
         {
             var result = new ResultContainer<CategoryModelDto>();
-            var category = _categoryRepository.GetOne<CategoryModel>(b => b.Name == name);
+            
+            var category = await _categoryRepository.GetByName(name);
             if (category == null)
             {
                 result.ErrorType = ErrorType.NotFound;
@@ -65,6 +64,7 @@ namespace Boards.BoardService.Core.Services.Category
         public async Task<ResultContainer<CategoryModelDto>> GetById(Guid id)
         {
             var result = new ResultContainer<CategoryModelDto>();
+            
             var category = await _categoryRepository.GetById<CategoryModel>(id);
             if (category == null)
             {
@@ -79,6 +79,7 @@ namespace Boards.BoardService.Core.Services.Category
         public async Task<ResultContainer<CategoryModelDto>> Delete(Guid id)
         {
             var result = new ResultContainer<CategoryModelDto>();
+            
             var category = await _categoryRepository.Remove<CategoryModel>(id);
             if (category == null)
             {
@@ -93,13 +94,21 @@ namespace Boards.BoardService.Core.Services.Category
         public async Task<ResultContainer<CategoryModelDto>> Update(UpdateCategoryRequestDto data)
         {
             var result = new ResultContainer<CategoryModelDto>();
-            var category = _categoryRepository.GetOne<CategoryModel>(b => b.Name == data.Name);
+            
+            var categoryWithNewName = await _categoryRepository.GetByName(data.NewName);
+            if (categoryWithNewName == null)
+            {
+                result.ErrorType = ErrorType.BadRequest;
+                return result;
+            }
+
+            var category = await _categoryRepository.GetByName(data.Name);
             if (category == null)
             {
                 result.ErrorType = ErrorType.NotFound;
                 return result;
             }
-
+            
             category.Name = data.NewName;
             result = _mapper.Map<ResultContainer<CategoryModelDto>>(await _categoryRepository.Update(category));
             return result;
@@ -112,16 +121,21 @@ namespace Boards.BoardService.Core.Services.Category
                 Data = new CategoryResponseDto()
             };
             var category = await _categoryRepository.GetById<CategoryModel>(id);
-            
+            if (category == null)
+            {
+                result.ErrorType = ErrorType.NotFound;
+                return result;
+            }
+
             var boards = await _boardService.GetByCategoryId(id);
             if (boards.ErrorType.HasValue)
             {
                 result.ErrorType = ErrorType.NotFound;
                 return result;
             }
-
+            
+            result = _mapper.Map<ResultContainer<CategoryResponseDto>>(category);
             result.Data.Boards = boards.Data;
-            result.Data.Name = category.Name;
             return result;
         }
     }

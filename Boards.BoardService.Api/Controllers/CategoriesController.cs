@@ -67,6 +67,7 @@ namespace Boards.BoardService.Api.Controllers
         /// </summary>
         /// <response code="200">Return created category</response>
         /// <response code="404">If the category doesn't exist</response>
+        /// <response code="400">If the category with new name already exists</response>
         /// <response code="401">If the User wasn't authorized</response>
         [HttpPut]
         [Authorize]

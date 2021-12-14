@@ -20,11 +20,9 @@ namespace Boards.BoardService.Core.Profiles
 
             CreateMap<CreateCategoryModelDto, CategoryModel>();
             
-            
             CreateMap<CreateThreadRequestDto, ThreadModel>()
                 .ForMember(x => x.Files, opt 
                     => opt.Ignore());
-            
 
             CreateMap<FileResponseDto, FileModel>();
             CreateMap<FileModel, FileResponseDto>();
@@ -44,7 +42,11 @@ namespace Boards.BoardService.Core.Profiles
 
             
             CreateMap<CategoryModel, CategoryModelDto>();
+            CreateMap<CategoryModel, CategoryResponseDto>();
             CreateMap<CategoryModel, ResultContainer<CategoryModelDto>>()
+                .ForMember(x => x.Data, opt =>
+                    opt.MapFrom(c => c));
+            CreateMap<CategoryModel, ResultContainer<CategoryResponseDto>>()
                 .ForMember(x => x.Data, opt =>
                     opt.MapFrom(c => c));
             
