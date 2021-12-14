@@ -48,11 +48,6 @@ namespace Boards.BoardService.Core.Services.Message
                 result.ErrorType = ErrorType.NotFound;
                 return result;
             }
-            
-            if (filter.PageNumber <= 0)
-                filter.PageNumber = _pagingOptions.DefaultPageNumber;
-            if (filter.PageSize <= 0)
-                filter.PageSize = _pagingOptions.DefaultPageSize;
 
             var messages = await _messageRepository.GetByThreadId(id, filter.PageNumber, filter.PageSize);
             if (messages.Count == 0 && filter.PageNumber > _pagingOptions.DefaultPageNumber)
