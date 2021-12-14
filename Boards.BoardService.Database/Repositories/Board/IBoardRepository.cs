@@ -9,5 +9,6 @@ namespace Boards.BoardService.Database.Repositories.Board
     public interface IBoardRepository : IBaseRepository
     {
         Task<ICollection<BoardModel>> GetByCategoryId(Guid id);
+        Task<BoardModel> GetByName(string name);
     }
 }

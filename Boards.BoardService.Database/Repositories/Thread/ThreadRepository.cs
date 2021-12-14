@@ -6,13 +6,16 @@ using Boards.Auth.Common.Filter;
 using Boards.Auth.Common.Options;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Base;
+using Microsoft.EntityFrameworkCore;
 
 namespace Boards.BoardService.Database.Repositories.Thread
 {
     public class ThreadRepository : BaseRepository, IThreadRepository
     {
+        private readonly AppDbContext _context;
         public ThreadRepository(AppDbContext context, PagingOptions options) : base(context, options)
         {
+            _context = context;
         }
 
         public async Task<ICollection<ThreadModel>> GetByBoardId(Guid id, int pageNumber, int pageSize)
@@ -24,12 +27,14 @@ namespace Boards.BoardService.Database.Repositories.Thread
             var source = Get<ThreadModel>(t => t.BoardId == id);
             var threads = await GetFiltered(source, filter);
             if (threads.Count == 0)
-                return null;
+                return threads;
             
             foreach (var thread in threads)
-                thread.Files = Get<FileModel>(f => f.ThreadId == thread.Id && f.MessageId == null)
-                    .AsEnumerable().ToList();
-            
+                thread.Files = _context.Set<FileModel>()
+                    .AsNoTracking().AsEnumerable()
+                    .Where(f => f.ThreadId == id && f.MessageId == null)
+                    .ToList();
+
             return threads;
         }
     }

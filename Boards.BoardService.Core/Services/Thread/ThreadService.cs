@@ -85,6 +85,38 @@ namespace Boards.BoardService.Core.Services.Thread
             return result;
         }
 
+        public async Task<ResultContainer<ICollection<ThreadModelDto>>> GetByBoardId(Guid id, FilterPagingDto filter)
+        {
+            var result = new ResultContainer<ICollection<ThreadModelDto>>
+            {
+                Data = new List<ThreadModelDto>()
+            };
+            
+            var board = await _boardRepository.GetById<BoardModel>(id);
+            if (board == null)
+            {
+                result.ErrorType = ErrorType.NotFound;
+                return result;
+            }
+            
+            if (filter.PageNumber <= 0)
+                filter.PageNumber = _pagingOptions.DefaultPageNumber;
+            if (filter.PageSize <= 0)
+                filter.PageSize = _pagingOptions.DefaultPageSize;
+
+            var threads = await _threadRepository.GetByBoardId(id, filter.PageNumber, filter.PageSize);
+            if (threads.Count == 0 && filter.PageNumber > _pagingOptions.DefaultPageNumber)
+            {
+                result.ErrorType = ErrorType.NotFound;
+                return result;
+            }
+            result = _mapper.Map<ResultContainer<ICollection<ThreadModelDto>>>(threads);
+            
+            foreach(var thread in result.Data)
+                thread.Files = await _fileStorageService.GetByThreadId(thread.Id);
+            return result;
+        }
+        
         public async Task<ResultContainer<ThreadModelDto>> GetById(Guid id)
         {
             var result = new ResultContainer<ThreadModelDto>();
