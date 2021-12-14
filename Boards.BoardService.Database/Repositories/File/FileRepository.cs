@@ -17,11 +17,10 @@ namespace Boards.BoardService.Database.Repositories.File
 
         public async Task<List<FileModel>> GetByThreadId(Guid id)
         {
-            return _context.Set<FileModel>()
+            return await _context.Set<FileModel>()
                 .AsNoTracking()
-                .AsEnumerable()
                 .Where(f => f.ThreadId == id && f.MessageId == null)
-                .ToList();
+                .ToListAsync();
         }
 
         public async Task<FileModel> Create(FileModel file)
