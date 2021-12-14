@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Boards.Auth.Common.Filter;
 using Boards.Auth.Common.Options;
 using Boards.BoardService.Database.Models;
 using Boards.BoardService.Database.Repositories.Base;
@@ -20,20 +19,33 @@ namespace Boards.BoardService.Database.Repositories.Thread
 
         public async Task<ICollection<ThreadModel>> GetByBoardId(Guid id, int pageNumber, int pageSize)
         {
-            var filter = new BaseFilter
-            {
-                Paging = new FilterPagingDto {PageNumber = pageNumber, PageSize = pageSize}
-            };
-            var source = Get<ThreadModel>(t => t.BoardId == id);
-            var threads = await GetFiltered(source, filter);
+            var threads = await GetFiltered<ThreadModel>
+                (t => t.BoardId == id, pageNumber, pageSize);
+
+            if (threads.Count == 0)
+                return threads;
+
+            return await GetFiles(threads);
+        }
+
+        public async Task<ICollection<ThreadModel>> GetByName(string name, int pageNumber, int pageSize)
+        {
+            var threads = await GetFiltered<ThreadModel>
+                (t => t.Name.Contains(name), pageNumber, pageSize);
+
             if (threads.Count == 0)
                 return threads;
             
+            return await GetFiles(threads);
+        }
+
+        private async Task<ICollection<ThreadModel>> GetFiles(ICollection<ThreadModel> threads)
+        {
             foreach (var thread in threads)
-                thread.Files = _context.Set<FileModel>()
-                    .AsNoTracking().AsEnumerable()
-                    .Where(f => f.ThreadId == id && f.MessageId == null)
-                    .ToList();
+                thread.Files = await _context.Set<FileModel>()
+                    .AsNoTracking()
+                    .Where(f => f.ThreadId == thread.Id && f.MessageId == null)
+                    .ToListAsync();
 
             return threads;
         }

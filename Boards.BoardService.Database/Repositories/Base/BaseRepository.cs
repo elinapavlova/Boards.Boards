@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Boards.Auth.Common.Base;
-using Boards.Auth.Common.Filter;
 using Boards.Auth.Common.Options;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,23 +22,13 @@ namespace Boards.BoardService.Database.Repositories.Base
             _context = context;
             _pagingOptions = pagingOptions;
         }
-        
-        public TEntity GetOne<TEntity>(Func<TEntity, bool> predicate) where TEntity : BaseModel
-        {
-            return _context.Set<TEntity>().AsNoTracking().FirstOrDefault(predicate);
-        }
-        
+
         public async Task<TEntity> Create<TEntity>(TEntity item) where TEntity : BaseModel
         {
             item.DateCreated = DateTime.Now;
             await _context.Set<TEntity>().AddAsync(item);
             await _context.SaveChangesAsync();
             return item;
-        }
-
-        public IQueryable<TEntity> Get<TEntity>(Func<TEntity, bool> predicate) where TEntity : BaseModel
-        {
-            return _context.Set<TEntity>().AsNoTracking().AsEnumerable().Where(predicate).AsQueryable();
         }
 
         public async Task<TEntity> GetById<TEntity>(Guid id) where TEntity : BaseModel
@@ -65,28 +54,26 @@ namespace Boards.BoardService.Database.Repositories.Base
             return item;
         }
 
-        public async Task<ICollection<TEntity>> GetFiltered<TEntity, TFilter>(IQueryable<TEntity> source, TFilter filter)
-        where TFilter : BaseFilter
-        where TEntity : BaseModel
-        {
-            var result = ApplyPaging(source, filter.Paging).AsEnumerable().ToList();
-            return result;
-        }
-
-
-        private IQueryable<TEntity> ApplyPaging<TEntity>(IQueryable<TEntity> source, FilterPagingDto paging) 
+        public async Task<ICollection<TEntity>> GetFiltered<TEntity>
+            (Func<TEntity, bool> predicate,int pageNumber, int pageSize)
             where TEntity : BaseModel
         {
-            if (paging.PageSize < 1)
-                paging.PageSize = _pagingOptions.DefaultPageSize;
+            if (pageSize < _pagingOptions.DefaultPageSize)
+                pageSize = _pagingOptions.DefaultPageSize;
             
-            if (paging.PageNumber < 1)
-                paging.PageNumber = _pagingOptions.DefaultPageNumber;
+            if (pageNumber < _pagingOptions.DefaultPageNumber)
+                pageSize = _pagingOptions.DefaultPageNumber;
             
-            return source
+            var result = _context.Set<TEntity>()
+                .AsNoTracking()
+                .AsQueryable()
                 .OrderByDescending(b => b.DateCreated)
-                .Skip((paging.PageNumber - 1) * paging.PageSize)
-                .Take(paging.PageSize);
+                .Where(predicate)
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            
+            return result;
         }
     }
 }

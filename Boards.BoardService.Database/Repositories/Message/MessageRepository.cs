@@ -1,32 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Boards.Auth.Common.Options;
 using Boards.BoardService.Database.Models;
-using Microsoft.EntityFrameworkCore;
+using Boards.BoardService.Database.Repositories.Base;
 
 namespace Boards.BoardService.Database.Repositories.Message
 {
-    public class MessageRepository : IMessageRepository
+    public class MessageRepository : BaseRepository, IMessageRepository
     {
-        private readonly AppDbContext _context;
+        public MessageRepository(AppDbContext context, PagingOptions options) : base(context, options)
+        { }
 
-        public MessageRepository(AppDbContext context)
+        public async Task<ICollection<MessageModel>> GetByThreadId(Guid id, int pageNumber, int pageSize)
         {
-            _context = context;
-        }
-
-        public async Task<List<MessageModel>> GetByThreadId(Guid id, int pageNumber, int pageSize)
-        {
-            var messages = _context.Set<MessageModel>()
-                .AsNoTracking().AsEnumerable()
-                .Where(m => m.ThreadId == id)
-                .AsQueryable()
-                .OrderByDescending(b => b.DateCreated)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
+            var messages = await GetFiltered<MessageModel>
+                (m => m.ThreadId == id, pageNumber, pageSize);
             return messages;
         }
     }

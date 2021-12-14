@@ -51,9 +51,11 @@ namespace Boards.BoardService.Core.Profiles
                     opt.MapFrom(c => c));
             
             
-            CreateMap<ThreadModel, ThreadModelDto>();
             CreateMap<ThreadModel, ThreadResponseDto>();
             CreateMap<ThreadModel, CreateThreadResponseDto>();
+            CreateMap<ThreadModel, ThreadModelDto>()                
+                .ForMember(x => x.Files, opt 
+                    => opt.Ignore());
             CreateMap<ThreadModel, ResultContainer<ThreadResponseDto>>()
                 .ForMember(x => x.Data, opt =>
                     opt.MapFrom(t => t));

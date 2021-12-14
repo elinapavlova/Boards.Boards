@@ -65,7 +65,7 @@ namespace Boards.BoardService.Core.Services.Message
             return result;
         }
 
-        private async Task<ResultContainer<ICollection<MessageResponseDto>>> GetFiles(List<MessageModel> messages)
+        private async Task<ResultContainer<ICollection<MessageResponseDto>>> GetFiles(ICollection<MessageModel> messages)
         {
             var result = new ResultContainer<ICollection<MessageResponseDto>>
             {

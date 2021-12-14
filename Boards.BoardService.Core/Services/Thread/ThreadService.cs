@@ -98,11 +98,6 @@ namespace Boards.BoardService.Core.Services.Thread
                 result.ErrorType = ErrorType.NotFound;
                 return result;
             }
-            
-            if (filter.PageNumber <= 0)
-                filter.PageNumber = _pagingOptions.DefaultPageNumber;
-            if (filter.PageSize <= 0)
-                filter.PageSize = _pagingOptions.DefaultPageSize;
 
             var threads = await _threadRepository.GetByBoardId(id, filter.PageNumber, filter.PageSize);
             if (threads.Count == 0 && filter.PageNumber > _pagingOptions.DefaultPageNumber)
@@ -110,8 +105,8 @@ namespace Boards.BoardService.Core.Services.Thread
                 result.ErrorType = ErrorType.NotFound;
                 return result;
             }
-            result = _mapper.Map<ResultContainer<ICollection<ThreadModelDto>>>(threads);
             
+            result = _mapper.Map<ResultContainer<ICollection<ThreadModelDto>>>(threads);
             foreach(var thread in result.Data)
                 thread.Files = await _fileStorageService.GetByThreadId(thread.Id);
             return result;
@@ -120,6 +115,7 @@ namespace Boards.BoardService.Core.Services.Thread
         public async Task<ResultContainer<ThreadModelDto>> GetById(Guid id)
         {
             var result = new ResultContainer<ThreadModelDto>();
+            
             var thread = await _threadRepository.GetById<ThreadModel>(id);
             if (thread == null)
             {
@@ -135,6 +131,7 @@ namespace Boards.BoardService.Core.Services.Thread
         public async Task<ResultContainer<ThreadResponseDto>> GetByIdWithMessages(Guid id, FilterPagingDto filter)
         {
             var result = new ResultContainer<ThreadResponseDto>();
+            
             var thread = await _threadRepository.GetById<ThreadModel>(id);
             if (thread == null)
             {
@@ -156,17 +153,12 @@ namespace Boards.BoardService.Core.Services.Thread
             return result;
         }
 
-        public async Task<ResultContainer<ICollection<ThreadModelDto>>> GetByName(string name, FilterPagingDto paging)
+        public async Task<ResultContainer<ICollection<ThreadModelDto>>> GetByName(string name, FilterPagingDto filter)
         {
             var result = new ResultContainer<ICollection<ThreadModelDto>>();
-            var filter = new BaseFilterDto
-            {
-                Paging = paging
-            };
-            
-            var threads = await _threadRepository.GetFiltered
-            (_threadRepository.Get<ThreadModel>(t => t.Name.Contains(name)), filter);
-            if (threads.Count == 0 && paging.PageNumber > _pagingOptions.DefaultPageNumber)
+
+            var threads = await _threadRepository.GetByName(name, filter.PageNumber, filter.PageSize);
+            if (threads.Count == 0 && filter.PageNumber > _pagingOptions.DefaultPageNumber)
             {
                 result.ErrorType = ErrorType.NotFound;
                 return result;
@@ -182,6 +174,7 @@ namespace Boards.BoardService.Core.Services.Thread
         public async Task<ResultContainer<ThreadModelDto>> Delete(Guid id)
         {
             var result = new ResultContainer<ThreadModelDto>();
+            
             var thread = await _threadRepository.Remove<ThreadModel>(id);
             if (thread == null)
             {
